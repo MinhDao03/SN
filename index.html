@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mylove</title>
+    <title>Happy Birthday</title>
     <link href="https://fonts.googleapis.com/css2?family=Mali&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@700&display=swap" rel="stylesheet">
 
@@ -68,7 +68,7 @@
             border-radius: 25px;
             color: white;
             font-weight: 600;
-            animation: jump 3s ease-in-out infinite;
+            
         }
 
         #yes-btn:hover {
@@ -87,59 +87,84 @@
             border-radius: 25px;
             color: white;
             font-weight: 600;
+            animation: jump 3s ease-in-out infinite;
         }
 
         #no-btn:hover {
             background: linear-gradient(45deg, #B71C1C, #E57373);
             box-shadow: 0 6px 14px rgba(183, 28, 28, 0.8);
         }
+        
+        #main-img, #text {
+            opacity: 0;
+            animation: fadeIn 1.2s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Hiệu ứng glow khi bấm nút */
+        #yes-btn:active, #no-btn:active {
+            box-shadow: 0 0 20px 5px #fff, 0 4px 10px rgba(72, 180, 97, 0.6);
+            transform: scale(1.08);
+            transition: all 0.15s;
+        }
 
         @keyframes jump {
-
-            0%,
-            25%,
-            75%,
-            100% {
+            0%, 25%, 75%, 100% {
                 transform: translateY(0);
             }
-
             50% {
                 transform: translateY(-15px);
             }
+        }
+
+        /* Hiệu ứng rung cho ảnh */
+        @keyframes imgShake {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-8px); }
+            80% { transform: translateX(8px); }
+            100% { transform: translateX(0); }
         }
 
         .falling-text {
             position: fixed;
             top: -10vh;
             font-family: 'Mali', cursive;
-            animation-name: fall;
+            animation-name: fall, scaleText;
             animation-timing-function: linear;
             animation-fill-mode: forwards;
             pointer-events: none;
             user-select: none;
             white-space: nowrap;
             color: #faf6f6;
-            text-shadow:
-                0 0 5px #9eb5ff;
+            text-shadow: 0 0 5px #9eb5ff;
         }
 
         @keyframes fall {
             0% {
                 top: -10vh;
             }
-
             100% {
                 top: 100vh;
             }
         }
 
-        @keyframes starBlink {
+        /* Hiệu ứng scale cho chữ trôi xuống */
+        @keyframes scaleText {
+            0% { transform: scale(0.7); }
+            20% { transform: scale(1.1); }
+            80% { transform: scale(1); }
+            100% { transform: scale(0.8); }
+        }
 
-            0%,
-            100% {
+        @keyframes starBlink {
+            0%, 100% {
                 opacity: 0;
             }
-
             50% {
                 opacity: 1;
             }
@@ -218,10 +243,10 @@
 
         const yesText = [
             "=>",
-            "Chưa đúng!",
-            "Sai rồi!",
-            "Không phải!",
-            "Đây rồi!"
+            "Chưa đúng! =>",
+            "Sai rồi! =>",
+            "Không phải! =>",
+            "Đây rồi !!!"
         ];
 
         const noImgs = [
@@ -238,19 +263,21 @@
         noBtn.addEventListener('click', () => {
             if (noClickCount < noText.length) {
                 imgElement.src = noImgs[noClickCount];
+                imgElement.style.animation = "imgShake 0.5s";
+                setTimeout(() => imgElement.style.animation = "", 500);
+
                 noBtn.innerText = noText[noClickCount];
-                yesBtn.innerText = yesText[noClickCount]; // Đổi sang chữ riêng cho nút yes
+                yesBtn.innerText = yesText[noClickCount];
                 noClickCount++;
 
-                yesFontSize = Math.max(8, yesFontSize + 0);
+                yesFontSize = Math.max(6, yesFontSize + 0);
                 yesBtn.style.fontSize = yesFontSize + "px";
-                yesBtn.style.padding = (10 + noClickCount * 2) + "px " + (20 + noClickCount * 2) + "px";
+                // yesBtn.style.padding = (10 + noClickCount * 2) + "px " + (20 + noClickCount * 2) + "px";
             }
 
             if (noClickCount === noText.length) {
                 setTimeout(() => {
                     noBtn.style.display = "none";
-                    // Hiện pháo hoa giấy trong vùng ảnh
                     showConfetti();
                 }, 100);
             }
@@ -374,7 +401,7 @@
                 "./assets/images/8.png"
             ];
 
-            const maxRepeat = 400; // tổng số ảnh trôi xuống
+            const maxRepeat = 200; // tổng số ảnh trôi xuống
             let imgFallCount = 0;
 
             const imgFallInterval = setInterval(() => {
@@ -448,3 +475,4 @@
     </script>
 
 </body>
+</html>
