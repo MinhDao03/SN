@@ -94,7 +94,7 @@
             background: linear-gradient(45deg, #B71C1C, #E57373);
             box-shadow: 0 6px 14px rgba(183, 28, 28, 0.8);
         }
-        
+
         #main-img, #text {
             opacity: 0;
             animation: fadeIn 1.2s ease forwards;
@@ -275,13 +275,20 @@
                 // yesBtn.style.padding = (10 + noClickCount * 2) + "px " + (20 + noClickCount * 2) + "px";
             }
 
-            if (noClickCount === noText.length) {
-                setTimeout(() => {
-                    noBtn.style.display = "none";
-                    showConfetti();
-                }, 100);
-            }
-        });
+            // Chỉ cho bấm yes khi đã đến ảnh cuối cùng
+                if (noClickCount === noText.length) {
+                    yesBtn.disabled = false; // Mở khóa nút yes
+                    setTimeout(() => {
+                        noBtn.style.display = "none";
+                        showConfetti();
+                    }, 100);
+                } else {
+                    yesBtn.disabled = true; // Khóa nút yes khi chưa đến ảnh cuối
+                }
+            });
+
+            // Khóa nút yes khi mới vào trang
+            yesBtn.disabled = true;
 
         function showConfetti() {
             confettiCanvas.width = imgElement.offsetWidth;
@@ -390,6 +397,11 @@
             birthdayAudio.currentTime = 0;
             birthdayAudio.play();
 
+            birthdayAudio.onended = function() {
+                birthdayAudio.currentTime = 0;
+                birthdayAudio.play();
+            };
+
              // Mảng các ảnh sẽ trôi xuống
             const fallingImages = [
                 "./assets/images/5.1.png",
@@ -401,7 +413,7 @@
                 "./assets/images/8.png"
             ];
 
-            const maxRepeat = 200; // tổng số ảnh trôi xuống
+            const maxRepeat = 300; // tổng số ảnh trôi xuống
             let imgFallCount = 0;
 
             const imgFallInterval = setInterval(() => {
